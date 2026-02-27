@@ -11,22 +11,24 @@ app.get("/tts", async (req, res) => {
   const text = req.query.text || "hello";
 
   try {
-    const response = await fetch(
+    const url =
       "https://translate.google.com/translate_tts?ie=UTF-8&q=" +
-        encodeURIComponent(text) +
-        "&tl=my&client=tw-ob",
-      {
-        headers: {
-          "User-Agent": "Mozilla/5.0",
-        },
-      }
-    );
+      encodeURIComponent(text) +
+      "&tl=en&client=tw-ob";
+
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+      },
+    });
 
     const buffer = await response.arrayBuffer();
 
     res.set("Content-Type", "audio/mpeg");
     res.send(Buffer.from(buffer));
   } catch (e) {
+    console.log(e);
     res.send("error");
   }
 });
